@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reálkamat Kalkulátor | TBP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            min-height: 100vh;
+            color: #F5F0E6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        
+        .logo {
+            display: inline-block;
+            background: #F7931A;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #D4A84B, #F7931A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #9CA3AF;
+            font-size: 1.1rem;
+        }
+        
+        .calculator-card {
+            background: rgba(45, 45, 68, 0.8);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #D4A84B;
+            margin-bottom: 8px;
+        }
+        
+        .input-group .helper {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            font-size: 24px;
+            font-weight: 600;
+            background: rgba(26, 26, 46, 0.8);
+            border: 2px solid rgba(212, 168, 75, 0.3);
+            border-radius: 12px;
+            color: #F5F0E6;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-wrapper input:focus {
+            border-color: #F7931A;
+            box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.2);
+        }
+        
+        .input-wrapper .suffix {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #9CA3AF;
+            font-weight: 500;
+        }
+        
+        .formula-display {
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+            border-left: 4px solid #F7931A;
+        }
+        
+        .formula-display .formula {
+            font-size: 18px;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+        }
+        
+        .formula-display .calculation {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F5F0E6;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #1A1A2E 0%, #252538 100%);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .result-card.positive {
+            border-color: #22C55E;
+            background: linear-gradient(135deg, #1A3D2A 0%, #1A2A3D 100%);
+        }
+        
+        .result-card.negative {
+            border-color: #EF4444;
+            background: linear-gradient(135deg, #3D1A1A 0%, #2D1A2A 100%);
+        }
+        
+        .result-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            transition: color 0.3s ease;
+        }
+        
+        .result-value.positive {
+            color: #22C55E;
+        }
+        
+        .result-value.negative {
+            color: #EF4444;
+        }
+        
+        .result-interpretation {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #F5F0E6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .insight-box {
+            background: rgba(212, 168, 75, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            border-left: 4px solid #D4A84B;
+        }
+        
+        .insight-box h3 {
+            color: #D4A84B;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .insight-box p {
+            color: #9CA3AF;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        
+        .preset-btn {
+            padding: 10px 16px;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(212, 168, 75, 0.3);
+            border-radius: 8px;
+            color: #F5F0E6;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .preset-btn:hover {
+            background: rgba(247, 147, 26, 0.2);
+            border-color: #F7931A;
+        }
+        
+        .preset-btn span {
+            color: #9CA3AF;
+            font-size: 11px;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #9CA3AF;
+            font-size: 13px;
+        }
+        
+        footer a {
+            color: #F7931A;
+            text-decoration: none;
+        }
+        
+        .bitcoin-hint {
+            background: linear-gradient(135deg, rgba(247, 147, 26, 0.1) 0%, rgba(212, 168, 75, 0.1) 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+            text-align: center;
+            border: 1px solid rgba(247, 147, 26, 0.3);
+        }
+        
+        .bitcoin-hint h3 {
+            color: #F7931A;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .bitcoin-hint p {
+            color: #F5F0E6;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .result-value {
+                font-size: 40px;
+            }
+            
+            .input-wrapper input {
+                font-size: 20px;
+                padding: 14px 45px 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">TBP · MODUL 1.4</div>
+            <h1>Reálkamat Kalkulátor</h1>
+            <p class="subtitle">Számold ki, mennyit ér valójában a megtakarításod hozama</p>
+        </header>
+        
+        <div class="calculator-card">
+            <div class="preset-buttons">
+                <button class="preset-btn" onclick="setPreset(8, 17)">
+                    🇭🇺 HU 2023
+                    <span>8% kamat, 17% infláció</span>
+                </button>
+                <button class="preset-btn" onclick="setPreset(5, 4)">
+                    🇭🇺 HU 2025
+                    <span>5% kamat, 4% infláció</span>
+                </button>
+                <button class="preset-btn" onclick="setPreset(4, 3)">
+                    🇪🇺 EU átlag
+                    <span>4% kamat, 3% infláció</span>
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <label>Nominális kamat (amit a bank ígér)</label>
+                <div class="helper">Pl. látra szóló betét, állampapír, PMÁP hozam</div>
+                <div class="input-wrapper">
+                    <input type="number" id="nominalRate" value="8" step="0.1" oninput="calculate()">
+                    <span class="suffix">%</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Infláció (az árak emelkedése)</label>
+                <div class="helper">KSH hivatalos adat vagy a te érzékelt inflációd</div>
+                <div class="input-wrapper">
+                    <input type="number" id="inflationRate" value="17" step="0.1" oninput="calculate()">
+                    <span class="suffix">%</span>
+                </div>
+            </div>
+            
+            <div class="formula-display">
+                <div class="formula">REÁLKAMAT = NOMINÁLIS KAMAT − INFLÁCIÓ</div>
+                <div class="calculation" id="formulaCalc">8% − 17% = −9%</div>
+            </div>
+        </div>
+        
+        <div class="result-card" id="resultCard">
+            <div class="result-label">A valódi hozamod</div>
+            <div class="result-value" id="resultValue">−9%</div>
+            <p class="result-interpretation" id="resultText">
+                Hiába nő a számládon a szám, a vásárlóerőd csökken. 
+                Minden évben 9%-kal kevesebbet ér a pénzed.
+            </p>
+        </div>
+        
+        <div class="insight-box" id="insightBox">
+            <h3>💡 Mit jelent ez a gyakorlatban?</h3>
+            <p id="practicalExample">
+                Ha 1.000.000 Ft-ot tartasz a bankban egy évig:<br>
+                <strong>Nominálisan:</strong> 1.080.000 Ft lesz<br>
+                <strong>Vásárlóerőben:</strong> ~910.000 Ft értékű marad<br>
+                <strong>Valódi veszteség:</strong> ~90.000 Ft
+            </p>
+        </div>
+        
+        <div class="bitcoin-hint">
+            <h3>🔶 A Bitcoin válasza</h3>
+            <p>
+                A Bitcoin fix kínálata (21 millió) azt jelenti, hogy a részesedésed 
+                soha nem hígul fel. Nincs jegybank, aki "inflálhatna". 
+                A következő modulban megmutatom, hogyan működik ez a gyakorlatban.
+            </p>
+        </div>
+        
+        <footer>
+            <p>© The Bitcoiner's Pretties | Dr. Stier Kata</p>
+            <p style="margin-top: 8px;">
+                <a href="#">Tovább a kurzushoz →</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        function calculate() {
+            const nominal = parseFloat(document.getElementById('nominalRate').value) || 0;
+            const inflation = parseFloat(document.getElementById('inflationRate').value) || 0;
+            const real = nominal - inflation;
+            
+            // Update formula display
+            const sign = real >= 0 ? '+' : '';
+            document.getElementById('formulaCalc').textContent = 
+                `${nominal}% − ${inflation}% = ${sign}${real.toFixed(1)}%`;
+            
+            // Update result
+            const resultValue = document.getElementById('resultValue');
+            const resultCard = document.getElementById('resultCard');
+            
+            resultValue.textContent = `${sign}${real.toFixed(1)}%`;
+            
+            if (real >= 0) {
+                resultValue.className = 'result-value positive';
+                resultCard.className = 'result-card positive';
+                document.getElementById('resultText').innerHTML = 
+                    `A pénzed <strong>valóban növekszik</strong>. ` +
+                    `A megtakarításod vásárlóereje évente ${real.toFixed(1)}%-kal nő. ` +
+                    `A rendszer most jutalmazza a türelmet.`;
+            } else {
+                resultValue.className = 'result-value negative';
+                resultCard.className = 'result-card negative';
+                document.getElementById('resultText').innerHTML = 
+                    `Hiába nő a számládon a szám, a <strong>vásárlóerőd csökken</strong>. ` +
+                    `Minden évben ${Math.abs(real).toFixed(1)}%-kal kevesebbet ér a pénzed.`;
+            }
+            
+            // Update practical example
+            const principal = 1000000;
+            const nominalEnd = principal * (1 + nominal / 100);
+            const realEnd = principal * (1 + real / 100);
+            const loss = principal - realEnd;
+            
+            if (real >= 0) {
+                document.getElementById('practicalExample').innerHTML = 
+                    `Ha 1.000.000 Ft-ot tartasz a bankban egy évig:<br>` +
+                    `<strong>Nominálisan:</strong> ${formatNumber(nominalEnd)} Ft lesz<br>` +
+                    `<strong>Vásárlóerőben:</strong> ~${formatNumber(realEnd)} Ft értékű<br>` +
+                    `<strong>Valódi nyereség:</strong> ~${formatNumber(realEnd - principal)} Ft 🎉`;
+            } else {
+                document.getElementById('practicalExample').innerHTML = 
+                    `Ha 1.000.000 Ft-ot tartasz a bankban egy évig:<br>` +
+                    `<strong>Nominálisan:</strong> ${formatNumber(nominalEnd)} Ft lesz<br>` +
+                    `<strong>Vásárlóerőben:</strong> ~${formatNumber(realEnd)} Ft értékű marad<br>` +
+                    `<strong>Valódi veszteség:</strong> ~${formatNumber(Math.abs(loss))} Ft 📉`;
+            }
+        }
+        
+        function formatNumber(num) {
+            return Math.round(num).toLocaleString('hu-HU');
+        }
+        
+        function setPreset(nominal, inflation) {
+            document.getElementById('nominalRate').value = nominal;
+            document.getElementById('inflationRate').value = inflation;
+            calculate();
+        }
+        
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
